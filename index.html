@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leungo - BGCSE 2026 Boost</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-purple: #f3e8ff;
+            --card-white: #ffffff;
+            --purple-primary: #7e22ce;
+            --purple-dark: #581c87;
+            --purple-light: #f3e8ff;
+            --purple-pill: #c084fc;
+            --purple-accent: #a855f7;
+            --text-dark: #2e1065;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-purple);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            background-color: var(--card-white);
+            padding: 16px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(126, 34, 206, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--purple-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: var(--purple-accent);
+            font-weight: 600;
+            display: block;
+        }
+
+        nav {
+            background-color: #f3e8ff;
+            padding: 5px;
+            border-radius: 30px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--purple-primary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn.active {
+            background-color: #9333ea;
+            color: white;
+            box-shadow: 0 2px 8px rgba(147, 51, 234, 0.35);
+        }
+
+        /* CONTAINER & TAB CONTROL */
+        main {
+            flex: 1;
+            max-width: 850px;
+            width: 92%;
+            margin: 35px auto;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARD STYLES */
+        .card {
+            background: var(--card-white);
+            padding: 35px 30px;
+            border-radius: 24px;
+            box-shadow: 0 6px 20px rgba(126, 34, 206, 0.08);
+            margin-bottom: 25px;
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
+
+        .center-card {
+            text-align: center;
+        }
+
+        /* HERO ELEMENTS */
+        .pill-badge {
+            display: inline-block;
+            background-color: #f3e8ff;
+            color: var(--purple-primary);
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h1.hero-title {
+            color: var(--purple-primary);
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .hero-subtitle {
+            color: var(--purple-accent);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 25px;
+        }
+
+        /* MESSAGE BOX */
+        .message-box {
+            border: 2px solid #e9d5ff;
+            background-color: #faf5ff;
+            padding: 24px;
+            border-radius: 18px;
+            text-align: left;
+            margin-bottom: 28px;
+        }
+
+        .message-title {
+            color: var(--purple-primary);
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-body {
+            font-style: italic;
+            color: #3b0764;
+            line-height: 1.7;
+            font-size: 0.98rem;
+        }
+
+        .message-author {
+            text-align: right;
+            color: var(--purple-primary);
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+
+        /* BUTTONS & ACTIONS */
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: #9333ea;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            background-color: #7e22ce;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--purple-primary);
+            border: 2px solid #e9d5ff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f3e8ff;
+        }
+
+        /* TIMETABLE & SEARCH */
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e9d5ff;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        .search-input:focus {
+            border-color: var(--purple-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--purple-primary);
+            color: white;
+            padding: 14px;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #f3e8ff;
+            font-size: 0.95rem;
+        }
+
+        .time-badge {
+            background-color: #f3e8ff;
+            color: var(--purple-primary);
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        .duration-tag {
+            color: #6b21a8;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px;
+            font-size: 0.85rem;
+            color: var(--purple-primary);
+            font-weight: 700;
+            margin-top: auto;
+        }
+
+        @media (max-width: 650px) {
+            header { flex-direction: column; gap: 15px; }
+            h1.hero-title { font-size: 1.8rem; }
+            .cta-group { flex-direction: column; }
+            .btn-primary, .btn-secondary { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <div class="logo">🎓 Leungo - BGCSE 2026</div>
+            <span class="logo-sub">October - November 2026</span>
+        </div>
+        <nav>
+            <button type="button" class="nav-btn active" id="btn-home" onclick="switchTab('home')">🏠 Home</button>
+            <button type="button" class="nav-btn" id="btn-timetable" onclick="switchTab('timetable')">📅 Timetable</button>
+            <button type="button" class="nav-btn" id="btn-stress" onclick="switchTab('stress')">🔮 Focus Zone</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HOME PAGE -->
+        <section id="home" class="tab-content active">
+            <div class="card center-card">
+                <div class="pill-badge">✨ BE PREPARED • STAY FOCUSED ✨</div>
+                <h1 class="hero-title">Shine Bright, Leungo! 💜</h1>
+                <p class="hero-subtitle">BGCSE 2026 • Personal Exam Portal</p>
+
+                <div class="message-box">
+                    <div class="message-title">💌 A Personal Note For Leungo</div>
+                    <p class="message-body">
+                        "As you walk into the exam hall this season, keep your head high and trust in every single hour you've dedicated to preparing. You have the intellect, the focus, and the resilience to conquer every paper on this schedule. Stay calm when faced with tough questions, take deep breaths, and let your brilliance shine through. I am cheering for you every step of the way!"
+                    </p>
+                    <div class="message-author">💜 With love and support, Motheo 💜</div>
+                </div>
+
+                <div class="cta-group">
+                    <button class="btn-primary" onclick="switchTab('timetable')">View Your Final Exam Schedule ➔</button>
+                    <button class="btn-secondary" onclick="switchTab('stress')">🔮 Mindset & Motivation</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIMETABLE PAGE -->
+        <section id="timetable" class="tab-content">
+            <div class="card">
+                <h2 style="color: var(--purple-primary); margin-bottom: 15px;">📅 Leungo's BGCSE Final Exam Timetable</h2>
+                <input type="text" id="searchInput" class="search-input" onkeyup="filterTable()" placeholder="🔍 Search subject (e.g. Science, Maths, Agriculture, Setswana)...">
+                
+                <div style="overflow-x: auto;">
+                    <table id="examTable">
+                        <thead>
+                            <tr>
+                                <th>DATE & DAY</th>
+                                <th>TIME</th>
+                                <th>EXAM / SUBJECT</th>
+                                <th>DURATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Friday 09 Oct</td><td><span class="time-badge">2:00 pm</span></td><td>Science Double Award – Multiple Choice</td><td><span class="duration-tag">1 hour</span></td></tr>
+                            <tr><td>Tuesday 13 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Maths 1</td><td><span class="duration-tag">1h 30m</span></td></tr>
+                            <tr><td>Tuesday 13 Oct</td><td><span class="time-badge">2:00 pm</span></td><td>Social Studies 1</td><td><span class="duration-tag">1h 30m</span></td></tr>
+                            <tr><td>Wednesday 14 Oct</td><td><span class="time-badge">8:00 am</span></td><td>English Language Comprehension</td><td><span class="duration-tag">2 hours</span></td></tr>
+                            <tr><td>Thursday 15 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Science Double Award – Alternative to Practical</td><td><span class="duration-tag">1h 30m</span></td></tr>
+                            <tr><td>Friday 16 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Setswana – Continuous Writing</td><td><span class="duration-tag">1h 10m</span></td></tr>
+                            <tr><td>Tuesday 20 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Maths 2</td><td><span class="duration-tag">2h 15m</span></td></tr>
+                            <tr><td>Wednesday 21 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Agriculture 2</td><td><span class="duration-tag">2h 15m</span></td></tr>
+                            <tr><td>Thursday 22 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Science Double Award 3</td><td><span class="duration-tag">2 hours</span></td></tr>
+                            <tr><td>Monday 26 Oct</td><td><span class="time-badge">2:00 pm</span></td><td>Social Studies – Paper 3</td><td><span class="duration-tag">1 hour</span></td></tr>
+                            <tr><td>Wednesday 28 Oct</td><td><span class="time-badge">8:00 am</span></td><td>Setswana – Literature</td><td><span class="duration-tag">2h 30m</span></td></tr>
+                            <tr><td>Wednesday 04 Nov</td><td><span class="time-badge">2:00 pm</span></td><td>Setswana – Paper 2 Comprehension • Summary • Translation</td><td><span class="duration-tag">1h 50m</span></td></tr>
+                            <tr><td>Thursday 05 Nov</td><td><span class="time-badge">9:00 am</span></td><td>Physical Education 1</td><td><span class="duration-tag">1 hour</span></td></tr>
+                            <tr><td>Monday 09 Nov</td><td><span class="time-badge">8:00 am</span></td><td>Maths 3</td><td><span class="duration-tag">2h 30m</span></td></tr>
+                            <tr><td>Thursday 12 Nov</td><td><span class="time-badge">2:00 pm</span></td><td>Agriculture 1</td><td><span class="duration-tag">45 minutes</span></td></tr>
+                            <tr><td>Monday 16 Nov</td><td><span class="time-badge">8:00 am</span></td><td>Social Studies 2</td><td><span class="duration-tag">2h 30m</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOCUS / MOTIVATION PAGE -->
+        <section id="stress" class="tab-content">
+            <div class="card center-card">
+                <div class="pill-badge">🔮 DAILY FOCUS & POWER QUOTES 🔮</div>
+                <h2 style="color: var(--purple-primary); margin-bottom: 15px;">Trust Your Preparation, Leungo! 💜</h2>
+                <div id="quoteDisplay" style="font-size: 1.2rem; font-weight: 700; color: var(--purple-primary); margin: 25px 0; background: #f3e8ff; padding: 20px; border-radius: 16px;">
+                    "Success isn't about luck; it's about preparation meets opportunity."
+                </div>
+                <button class="btn-primary" onclick="newQuote()">✨ Draw Inspiration</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        Best of luck, Leungo! You've got this • BGCSE 2026 ✨
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toUpperCase();
+            const trs = document.getElementById('examTable').getElementsByTagName('tr');
+            
+            for (let i = 1; i < trs.length; i++) {
+                const text = trs[i].textContent || trs[i].innerText;
+                trs[i].style.display = text.toUpperCase().indexOf(input) > -1 ? '' : 'none';
+            }
+        }
+
+        const quotes = [
+            "Success isn't about luck; it's about preparation meeting opportunity.",
+            "Take it paper by paper, question by question. You are ready!",
+            "Believe in your knowledge. You have prepared thoroughly for this moment.",
+            "Stay composed, maintain your pace, and let your brilliance show.",
+            "Every exam paper is just another step toward your grand goals!"
+        ];
+
+        function newQuote() {
+            const random = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quoteDisplay').innerText = `"${quotes[random]}"`;
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+            }
+        }
+    </script>
+</body>
+</html>
