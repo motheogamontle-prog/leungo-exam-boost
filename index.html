@@ -11,9 +11,10 @@
             --card-white: #ffffff;
             --purple-primary: #7e22ce;
             --purple-dark: #6b21a8;
-            --purple-light: #f3e8ff;
+            --purple-light: #faf5ff;
             --purple-pill: #a855f7;
             --text-dark: #2c2c2c;
+            --border-purple: #e9d5ff;
         }
 
         * {
@@ -58,7 +59,7 @@
         }
 
         nav {
-            background-color: #f3e8ff;
+            background-color: var(--bg-purple);
             padding: 5px;
             border-radius: 30px;
             display: flex;
@@ -124,7 +125,7 @@
         /* HERO ELEMENTS */
         .pill-badge {
             display: inline-block;
-            background-color: #f3e8ff;
+            background-color: var(--bg-purple);
             color: var(--purple-primary);
             font-size: 0.78rem;
             font-weight: 800;
@@ -155,8 +156,8 @@
 
         /* MESSAGE BOX */
         .message-box {
-            border: 2px solid #e9d5ff;
-            background-color: #faf5ff;
+            border: 2px solid var(--border-purple);
+            background-color: var(--purple-light);
             padding: 24px;
             border-radius: 18px;
             text-align: left;
@@ -188,6 +189,38 @@
             margin-top: 15px;
         }
 
+        /* PROGRESS COUNTER */
+        .progress-container {
+            background-color: var(--purple-light);
+            border: 2px dashed var(--border-purple);
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .progress-title {
+            color: var(--purple-primary);
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-bg {
+            background-color: #e2e8f0;
+            height: 16px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 12px 0 8px 0;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #a855f7, #7e22ce);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
         /* BUTTONS & ACTIONS */
         .cta-group {
             display: flex;
@@ -217,7 +250,7 @@
         .btn-secondary {
             background-color: white;
             color: var(--purple-primary);
-            border: 2px solid #e9d5ff;
+            border: 2px solid var(--border-purple);
             padding: 12px 24px;
             border-radius: 30px;
             font-weight: 800;
@@ -227,14 +260,14 @@
         }
 
         .btn-secondary:hover {
-            background-color: #f3e8ff;
+            background-color: var(--bg-purple);
         }
 
         /* TIMETABLE & SEARCH */
         .search-input {
             width: 100%;
             padding: 14px 20px;
-            border: 2px solid #e9d5ff;
+            border: 2px solid var(--border-purple);
             border-radius: 30px;
             font-size: 0.95rem;
             outline: none;
@@ -260,17 +293,63 @@
 
         td {
             padding: 14px;
-            border-bottom: 1px solid #f3e8ff;
+            border-bottom: 1px solid var(--bg-purple);
             font-size: 0.95rem;
         }
 
-        .time-badge {
+        tr.completed-row {
             background-color: #f3e8ff;
+            opacity: 0.65;
+            text-decoration: line-through;
+        }
+
+        .time-badge {
+            background-color: var(--bg-purple);
             color: var(--purple-primary);
             font-weight: 800;
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 0.85rem;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+            width: 50px;
+        }
+
+        .checkbox-cell input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--purple-primary);
+            cursor: pointer;
+        }
+
+        /* BREATHING CIRCLE ANIMATION */
+        .breathing-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7, #7e22ce);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.95); }
+            50% { transform: scale(1.25); }
         }
 
         footer {
@@ -312,6 +391,15 @@
                 <h1 class="hero-title">Good Luck, Leungo! 💜</h1>
                 <p class="hero-subtitle">BGCSE 2026 • Official Exam Companion</p>
 
+                <!-- LIVE PROGRESS COUNTER -->
+                <div class="progress-container">
+                    <div class="progress-title" id="progressText">Exams Completed: 0 / 16</div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #6b21a8; font-weight: 600;">Check off papers as you write them in your Timetable tab!</p>
+                </div>
+
                 <div class="message-box">
                     <div class="message-title">📩 A Special Message For Leungo</div>
                     <p class="message-body">
@@ -327,7 +415,7 @@
             </div>
         </section>
 
-        <!-- TIMETABLE PAGE -->
+        <!-- TIMETABLE PAGE WITH INTERACTIVE CHECKBOXES -->
         <section id="timetable" class="tab-content">
             <div class="card">
                 <h2 style="color: var(--purple-primary); margin-bottom: 15px;">📅 BGCSE 2026 Exam Timetable</h2>
@@ -337,6 +425,7 @@
                     <table id="examTable">
                         <thead>
                             <tr>
+                                <th class="checkbox-cell">DONE</th>
                                 <th>DAY</th>
                                 <th>DATE</th>
                                 <th>SUBJECT</th>
@@ -345,34 +434,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>FRI</td><td>09 Oct 26</td><td>SDA</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>TUE</td><td>13 Oct 26</td><td>Maths</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>TUE</td><td>13 Oct 26</td><td>Social Studies</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>WED</td><td>14 Oct 26</td><td>English</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>THU</td><td>15 Oct 26</td><td>SDA</td><td>PP4</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>FRI</td><td>16 Oct 26</td><td>Setswana</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>MON</td><td>19 Oct 26</td><td>English</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>TUE</td><td>20 Oct 26</td><td>Maths</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>THU</td><td>22 Oct 26</td><td>SDA</td><td>PP3</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>MON</td><td>26 Oct 26</td><td>Social Studies</td><td>PP3</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>WED</td><td>28 Oct 26</td><td>Setswana</td><td>PP3</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>WED</td><td>04 Nov 26</td><td>Setswana</td><td>PP2</td><td><span class="time-badge">14:00</span></td></tr>
-                            <tr><td>FRI</td><td>06 Nov 26</td><td>Physical Edu</td><td>PP1</td><td><span class="time-badge">08:00</span></td></tr>
-                            <tr><td>MON</td><td>09 Nov 26</td><td>Maths</td><td>PP3</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>THU</td><td>12 Nov 26</td><td>Agriculture</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
-                            <tr><td>MON</td><td>16 Nov 26</td><td>Social Studies</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>FRI</td><td>09 Oct 26</td><td>SDA</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>TUE</td><td>13 Oct 26</td><td>Maths</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>TUE</td><td>13 Oct 26</td><td>Social Studies</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>WED</td><td>14 Oct 26</td><td>English</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>THU</td><td>15 Oct 26</td><td>SDA</td><td>PP4</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>FRI</td><td>16 Oct 26</td><td>Setswana</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>MON</td><td>19 Oct 26</td><td>English</td><td>PP1</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>TUE</td><td>20 Oct 26</td><td>Maths</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>THU</td><td>22 Oct 26</td><td>SDA</td><td>PP3</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>MON</td><td>26 Oct 26</td><td>Social Studies</td><td>PP3</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>WED</td><td>28 Oct 26</td><td>Setswana</td><td>PP3</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>WED</td><td>04 Nov 26</td><td>Setswana</td><td>PP2</td><td><span class="time-badge">14:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>FRI</td><td>06 Nov 26</td><td>Physical Edu</td><td>PP1</td><td><span class="time-badge">08:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>MON</td><td>09 Nov 26</td><td>Maths</td><td>PP3</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>THU</td><td>12 Nov 26</td><td>Agriculture</td><td>PP1</td><td><span class="time-badge">09:00</span></td></tr>
+                            <tr><td class="checkbox-cell"><input type="checkbox" onchange="toggleRow(this)"></td><td>MON</td><td>16 Nov 26</td><td>Social Studies</td><td>PP2</td><td><span class="time-badge">09:00</span></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- STRESS RELIEF PAGE -->
+        <!-- STRESS RELIEF PAGE WITH BREATHING EXERCISE & QUOTES -->
         <section id="stress" class="tab-content">
             <div class="card center-card">
-                <div class="pill-badge">✨ DAILY HYPE & MOTIVATION ✨</div>
-                <h2 style="color: var(--purple-primary); margin-bottom: 15px;">Take A Deep Breath! 💜</h2>
-                <div id="quoteDisplay" style="font-size: 1.2rem; font-weight: 700; color: var(--purple-primary); margin: 25px 0; background: #faf5ff; padding: 20px; border-radius: 16px;">
+                <div class="pill-badge">✨ DAILY HYPE & BREATHING ZONE ✨</div>
+                <h2 style="color: var(--purple-primary); margin-bottom: 10px;">Take A Deep Breath! 💜</h2>
+                <p style="font-size: 0.95rem; color: #666;">Focus on the circle. Breathe in as it expands, and breathe out as it shrinks.</p>
+                
+                <div class="breathing-box">
+                    <div class="circle">Breathe 💜</div>
+                </div>
+
+                <div id="quoteDisplay" style="font-size: 1.15rem; font-weight: 700; color: var(--purple-primary); margin: 25px 0; background: var(--purple-light); padding: 20px; border-radius: 16px; border: 1px solid var(--border-purple);">
                     "You are capable of achieving amazing things!"
                 </div>
                 <button class="btn-primary" onclick="newQuote()">✨ Get New Hype Quote</button>
@@ -408,12 +503,39 @@
             }
         }
 
+        function toggleRow(checkbox) {
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                row.classList.add('completed-row');
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 50, origin: { y: 0.7 } });
+                }
+            } else {
+                row.classList.remove('completed-row');
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('#examTable tbody input[type="checkbox"]');
+            const total = checkboxes.length;
+            let checkedCount = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) checkedCount++;
+            });
+
+            const percent = Math.round((checkedCount / total) * 100);
+            document.getElementById('progressText').innerText = `Exams Completed: ${checkedCount} / ${total} (${percent}%)`;
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
         const quotes = [
             "You are capable of achieving amazing things!",
             "Trust yourself. You've prepared for this!",
             "One paper at a time. You've got all the tools you need!",
             "Your hard work and heart will pay off!",
-            "Stay calm, stay focused, and shine bright!"
+            "Stay calm, stay focused, and shine bright!",
+            "Take it paper by paper—you're getting closer every day!"
         ];
 
         function newQuote() {
